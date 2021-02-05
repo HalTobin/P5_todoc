@@ -1,13 +1,13 @@
 package com.cleanup.todoc.database;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.OnConflictStrategy;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.ContentValues;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+import androidx.room.Database;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.cleanup.todoc.database.dao.ProjectDao;
 import com.cleanup.todoc.database.dao.TaskDao;
@@ -22,7 +22,7 @@ public abstract class SaveMyTaskDatabase extends RoomDatabase {
     public abstract TaskDao taskDao();
     public abstract ProjectDao projectDao();
 
-    public static SaveMyTaskDatabase getINSTANCE(Context context) {
+    public static SaveMyTaskDatabase getInstance(Context context) {
         if(INSTANCE == null) {
             synchronized(SaveMyTaskDatabase.class) {
                 if(INSTANCE == null) {
@@ -42,9 +42,23 @@ public abstract class SaveMyTaskDatabase extends RoomDatabase {
 
                 ContentValues contentValues = new ContentValues();
                 contentValues.put("id", 1);
-                contentValues.put("projectname", "Projet Tartampion");
+                contentValues.put("name", "Projet Tartampion");
                 contentValues.put("color", 0xFFEADAD1);
+                db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
 
+                contentValues.put("id", 2);
+                contentValues.put("name", "Projet Lucidia");
+                contentValues.put("color", 0xFFB4CDBA);
+                db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
+
+                contentValues.put("id", 3);
+                contentValues.put("name", "Projet Circus");
+                contentValues.put("color", 0xFFA3CED2);
+                db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
+
+                contentValues.put("id", 4);
+                contentValues.put("name", "Projet Puce Muse");
+                contentValues.put("color", 0xFFEADAD2);
                 db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
             }
         };
