@@ -58,7 +58,7 @@ public abstract class SaveMyTaskDatabase extends RoomDatabase {
 
                 contentValues.put("id", 4);
                 contentValues.put("name", "Projet Puce Muse");
-                contentValues.put("color", 0xFFEADAD2);
+                contentValues.put("color", 0xFF00AAAA);
                 db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
             }
         };

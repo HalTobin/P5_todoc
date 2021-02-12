@@ -23,6 +23,7 @@ import com.cleanup.todoc.injections.Injection;
 import com.cleanup.todoc.injections.ViewModelFactory;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.model.TaskWithProject;
 import com.cleanup.todoc.viewModel.TaskViewModel;
 
 import java.util.ArrayList;
@@ -48,10 +49,12 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     @NonNull
     private List<Task> tasks = new ArrayList<>();
 
+    private List<TaskWithProject> tasksWithProject = new ArrayList<>();
+
     /**
      * The adapter which handles the list of tasks
      */
-    private final TasksAdapter adapter = new TasksAdapter(tasks, this);
+    private final TasksAdapter adapter = new TasksAdapter(tasksWithProject, this);
 
     /**
      * The sort method to be used to display tasks
@@ -108,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         listTasks.setAdapter(adapter);
 
-        this.getAllTasks();
+        this.getAllTasksWithProject();
         this.getAllProject();
 
         findViewById(R.id.fab_add_task).setOnClickListener(new View.OnClickListener() {
@@ -118,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             }
         });
         this.taskViewModel.getAllTasksWithProject().observe(this, taskWithProject -> {
-            System.out.println("TEST");
+            this.tasksWithProject = taskWithProject;
+            updateTasks();
         });
     }
 
@@ -148,8 +152,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     }
 
     @Override
-    public void onDeleteTask(Task task) {
-        taskViewModel.deleteTask(task.getTaskId());
+    public void onDeleteTask(TaskWithProject taskWithProject) {
+        taskViewModel.deleteTask(taskWithProject.getTask().getTaskId());
         updateTasks();
     }
 
@@ -164,9 +168,10 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         });
     }
 
-    private void getAllTasks() {
-        this.taskViewModel.getAllTasks().observe(this, taskList -> {
-            this.tasks = taskList;
+    private void getAllTasksWithProject() {
+        this.taskViewModel.getAllTasksWithProject().observe(this, taskWithProjectList -> {
+            this.tasksWithProject = taskWithProjectList;
+            tasks.clear();
             updateTasks();
         });
     }
@@ -244,7 +249,10 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * Updates the list of tasks in the UI
      */
     private void updateTasks() {
-        if (tasks.size() == 0) {
+        /*for (TaskWithProject twp:tasksWithProject) {
+            tasks.add(twp.getTask());
+        }*/
+        if (tasksWithProject.size() == 0) {
             lblNoTasks.setVisibility(View.VISIBLE);
             listTasks.setVisibility(View.GONE);
         } else {
@@ -252,20 +260,20 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             listTasks.setVisibility(View.VISIBLE);
             switch (sortMethod) {
                 case ALPHABETICAL:
-                    Collections.sort(tasks, new Task.TaskAZComparator());
+                    Collections.sort(tasksWithProject, new TaskWithProject.TaskAZComparator());
                     break;
                 case ALPHABETICAL_INVERTED:
-                    Collections.sort(tasks, new Task.TaskZAComparator());
+                    Collections.sort(tasksWithProject, new TaskWithProject.TaskZAComparator());
                     break;
                 case RECENT_FIRST:
-                    Collections.sort(tasks, new Task.TaskRecentComparator());
+                    Collections.sort(tasksWithProject, new TaskWithProject.TaskRecentComparator());
                     break;
                 case OLD_FIRST:
-                    Collections.sort(tasks, new Task.TaskOldComparator());
+                    Collections.sort(tasksWithProject, new TaskWithProject.TaskOldComparator());
                     break;
 
             }
-            adapter.updateTasks(tasks);
+            adapter.updateTasks(tasksWithProject);
         }
     }
 
