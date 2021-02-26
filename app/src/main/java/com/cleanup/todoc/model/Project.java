@@ -5,6 +5,9 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p>Models for project in which tasks are included.</p>
  *
@@ -77,6 +80,4 @@ public class Project {
     public String toString() {
         return getName();
     }
-
-
 }

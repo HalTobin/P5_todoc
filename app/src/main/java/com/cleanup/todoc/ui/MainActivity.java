@@ -44,11 +44,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     private List<Project> allProjects = new ArrayList<>();
 
     /**
-     * List of all current tasks of the application
+     * List of all current tasksWithProject of the application
      */
-    @NonNull
-    private List<Task> tasks = new ArrayList<>();
-
     private List<TaskWithProject> tasksWithProject = new ArrayList<>();
 
     /**
@@ -144,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             sortMethod = SortMethod.OLD_FIRST;
         } else if (id == R.id.filter_recent_first) {
             sortMethod = SortMethod.RECENT_FIRST;
+        } else if (id == R.id.filter_project) {
+            sortMethod = SortMethod.PROJECT;
         }
 
         updateTasks();
@@ -171,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     private void getAllTasksWithProject() {
         this.taskViewModel.getAllTasksWithProject().observe(this, taskWithProjectList -> {
             this.tasksWithProject = taskWithProjectList;
-            tasks.clear();
             updateTasks();
         });
     }
@@ -249,9 +247,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * Updates the list of tasks in the UI
      */
     private void updateTasks() {
-        /*for (TaskWithProject twp:tasksWithProject) {
-            tasks.add(twp.getTask());
-        }*/
         if (tasksWithProject.size() == 0) {
             lblNoTasks.setVisibility(View.VISIBLE);
             listTasks.setVisibility(View.GONE);
@@ -271,7 +266,10 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
                 case OLD_FIRST:
                     Collections.sort(tasksWithProject, new TaskWithProject.TaskOldComparator());
                     break;
-
+                //TODO verify first
+                case PROJECT:
+                    Collections.sort(tasksWithProject, new TaskWithProject.TaskProjectComparator());
+                    break;
             }
             adapter.updateTasks(tasksWithProject);
         }
@@ -351,6 +349,10 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
          * First created first
          */
         OLD_FIRST,
+        /**
+         * Sort by project
+         */
+        PROJECT,
         /**
          * No sort
          */

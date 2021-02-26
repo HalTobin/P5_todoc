@@ -1,15 +1,17 @@
 package com.cleanup.todoc;
 
+import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.model.TaskWithProject;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 /**
@@ -20,15 +22,19 @@ import static org.junit.Assert.assertSame;
 public class TaskUnitTest {
     @Test
     public void test_projects() {
-        final Task task1 = new Task(1, 1, "task 1", new Date().getTime());
-        final Task task2 = new Task(2, 2, "task 2", new Date().getTime());
-        final Task task3 = new Task(3, 3, "task 3", new Date().getTime());
-        final Task task4 = new Task(4, 4, "task 4", new Date().getTime());
+        List<Project> ProjectsList = getDefaultProjectList();
 
-        assertEquals("Projet Tartampion", task1.getProject().getName());
-        assertEquals("Projet Lucidia", task2.getProject().getName());
-        assertEquals("Projet Circus", task3.getProject().getName());
-        assertNull(task4.getProject());
+        final TaskWithProject twp = new TaskWithProject();
+
+        final Task task1 = new Task(1, "task 1", new Date().getTime());
+        final Task task2 = new Task(2, "task 2", new Date().getTime());
+        final Task task3 = new Task(3, "task 3", new Date().getTime());
+        final Task task4 = new Task(4, "task 4", new Date().getTime());
+
+        assertEquals("Projet Tartampion", ProjectsList.get((int) (task1.getProjectId()-1)).getName());
+        assertEquals("Projet Lucidia", ProjectsList.get((int) (task2.getProjectId()-1)).getName());
+        assertEquals("Projet Circus", ProjectsList.get((int) (task3.getProjectId()-1)).getName());
+        assertEquals("Projet Puce Muse", ProjectsList.get((int) (task4.getProjectId()-1)).getName());
     }
 
     @Test
@@ -97,5 +103,19 @@ public class TaskUnitTest {
         assertSame(tasks.get(0), task1);
         assertSame(tasks.get(1), task2);
         assertSame(tasks.get(2), task3);
+    }
+
+    /**
+     * Create and return a default list of project for testing
+     *
+     * @return a default list of project
+     */
+    public List<Project> getDefaultProjectList() {
+        List<Project> defaultProjectList = new ArrayList<>();
+        defaultProjectList.add(new Project(1, "Projet Tartampion", -1385775));
+        defaultProjectList.add(new Project(1, "Projet Lucidia", -4928070));
+        defaultProjectList.add(new Project(1, "Projet Circus", -6041902));
+        defaultProjectList.add(new Project(1, "Projet Puce Muse", -16733526));
+        return defaultProjectList;
     }
 }

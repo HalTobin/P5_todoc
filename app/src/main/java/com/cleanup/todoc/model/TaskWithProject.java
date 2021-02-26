@@ -17,6 +17,21 @@ public class TaskWithProject {
 
     public Project getProject() { return project; }
 
+    public void setTask(Task task) { this.task= task; }
+
+    public void setProject(Project project) { this.project = project; }
+
+    /**
+     * Comparator to sort task from A to Z
+     */
+    //TODO : to implement
+    public static class TaskProjectComparator implements Comparator<TaskWithProject> {
+        @Override
+        public int compare(TaskWithProject left, TaskWithProject right) {
+            return left.project.getName().compareTo(right.project.getName());
+        }
+    }
+
     /**
      * Comparator to sort task from A to Z
      */

@@ -43,7 +43,6 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
      * @param tasksWithProject the list of tasks the adapter deals with to set
      */
     TasksAdapter(@NonNull final List<TaskWithProject> tasksWithProject, @NonNull final DeleteTaskListener deleteTaskListener) {
-        //TODO tasks => tasksWithProject
         this.tasksWithProject = tasksWithProject;
         this.deleteTaskListener = deleteTaskListener;
     }
