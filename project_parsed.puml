@@ -139,6 +139,8 @@ class com.cleanup.todoc.model.Task {
 }
 
 androidx.room.RoomDatabase <|-- com.cleanup.todoc.database.SaveMyTaskDatabase
+com.cleanup.todoc.model.TaskWithProject -- com.cleanup.todoc.model.Task
+com.cleanup.todoc.model.TaskWithProject -- com.cleanup.todoc.model.Project
 com.cleanup.todoc.injections.Factory <|.. com.cleanup.todoc.injections.ViewModelFactory
 androidx.lifecycle.ViewModel <|-- com.cleanup.todoc.viewModel.TaskViewModel
 com.cleanup.todoc.ui.DeleteTaskListener <|.. com.cleanup.todoc.ui.MainActivity

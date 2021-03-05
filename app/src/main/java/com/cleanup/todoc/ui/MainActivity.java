@@ -266,13 +266,12 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
                 case OLD_FIRST:
                     Collections.sort(tasksWithProject, new TaskWithProject.TaskOldComparator());
                     break;
-                //TODO verify first
                 case PROJECT:
                     Collections.sort(tasksWithProject, new TaskWithProject.TaskProjectComparator());
                     break;
             }
-            adapter.updateTasks(tasksWithProject);
         }
+        adapter.updateTasks(tasksWithProject);
     }
 
     /**

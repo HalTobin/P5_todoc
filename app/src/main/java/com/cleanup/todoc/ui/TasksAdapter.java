@@ -52,7 +52,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
      *
      * @param tasksWithProject the list of tasks the adapter deals with to set
      */
-    void updateTasks(@NonNull final List<TaskWithProject> tasksWithProject) {
+    public void updateTasks(@NonNull final List<TaskWithProject> tasksWithProject) {
         this.tasksWithProject = tasksWithProject;
         notifyDataSetChanged();
     }

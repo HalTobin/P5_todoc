@@ -1,5 +1,8 @@
 package com.cleanup.todoc;
 
+import androidx.room.Room;
+import androidx.test.annotation.UiThreadTest;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 
@@ -10,13 +13,21 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.cleanup.todoc.R;
+import com.cleanup.todoc.database.SaveMyTaskDatabase;
+import com.cleanup.todoc.database.dao.TaskDao;
+import com.cleanup.todoc.model.TaskWithProject;
+import com.cleanup.todoc.ui.TasksAdapter;
 import com.cleanup.todoc.utils.DeleteViewAction;
 import com.cleanup.todoc.utils.RecyclerViewMatcher;
 import com.cleanup.todoc.ui.MainActivity;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -38,13 +49,14 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityInstrumentedTest {
 
+    private SaveMyTaskDatabase myDataBase;
+
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
     public void addAndRemoveTask() {
         MainActivity activity = rule.getActivity();
-        TextView lblNoTask = activity.findViewById(R.id.lbl_no_task);
         RecyclerView listTasks = activity.findViewById(R.id.list_tasks);
 
         int ITEM_COUNT = listTasks.getAdapter().getItemCount();
@@ -53,31 +65,19 @@ public class MainActivityInstrumentedTest {
         onView(ViewMatchers.withId(R.id.txt_task_name)).perform(replaceText("Tâche example"));
         onView(withId(android.R.id.button1)).perform(click());
 
-
-        // Check that lblTask is not displayed anymore
-        //assertThat(lblNoTask.getVisibility(), equalTo(View.GONE));
-        // Check that recyclerView is displayed
-        //assertThat(listTasks.getVisibility(), equalTo(View.VISIBLE));
-        // Check that it contains one element only
         assertEquals(listTasks.getAdapter().getItemCount(), ITEM_COUNT + 1);
 
         onView(ViewMatchers.withId(R.id.list_tasks)).perform(RecyclerViewActions.actionOnItemAtPosition(ITEM_COUNT, new DeleteViewAction()));
 
-        // Check that lblTask is displayed
-        //assertThat(lblNoTask.getVisibility(), equalTo(View.VISIBLE));
-        // Check that recyclerView is not displayed anymore
-        //assertThat(listTasks.getVisibility(), equalTo(View.GONE));
-
-        //int FINAL_COUNT = listTasks.getAdapter().getItemCount();
         assertEquals(listTasks.getAdapter().getItemCount(), ITEM_COUNT);
     }
 
     @Test
     public void sortTasks() {
-        MainActivity activity = rule.getActivity();
+        myDataBase = SaveMyTaskDatabase.getInstance(ApplicationProvider.getApplicationContext());
+        myDataBase.taskDao().deleteAllTasks();
+        //MainActivity activity = rule.getActivity();
 
-        //int ITEM_COUNT_OFFSET =
-        
         onView(ViewMatchers.withId(R.id.fab_add_task)).perform(click());
         onView(ViewMatchers.withId(R.id.txt_task_name)).perform(replaceText("aaa Tâche example"));
         onView(withId(android.R.id.button1)).perform(click());

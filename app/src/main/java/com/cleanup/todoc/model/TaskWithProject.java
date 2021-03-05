@@ -24,7 +24,6 @@ public class TaskWithProject {
     /**
      * Comparator to sort task from A to Z
      */
-    //TODO : to implement
     public static class TaskProjectComparator implements Comparator<TaskWithProject> {
         @Override
         public int compare(TaskWithProject left, TaskWithProject right) {

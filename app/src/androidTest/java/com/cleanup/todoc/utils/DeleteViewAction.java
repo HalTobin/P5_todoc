@@ -28,6 +28,6 @@ public class DeleteViewAction implements ViewAction {
         View button = view.findViewById(R.id.img_delete);
         // Maybe check for null
         button.performClick();
-        uiController.loopMainThreadForAtLeast(1000);
+        uiController.loopMainThreadForAtLeast(4000);
     }
 }
