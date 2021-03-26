@@ -15,12 +15,10 @@ import java.util.concurrent.Executor;
 
 public class TaskViewModel extends ViewModel {
 
-    //REPOSITORIES
     private final TaskDataRepository taskDataSource;
     private final ProjectDataRepository projectDataSource;
     private final Executor myExecutor;
 
-    //DATA
     @Nullable
     private LiveData<Project> currentProject;
 

@@ -17,7 +17,7 @@ public class TaskWithProject {
 
     public Project getProject() { return project; }
 
-    public void setTask(Task task) { this.task= task; }
+    public void setTask(Task task) { this.task = task; }
 
     public void setProject(Project project) { this.project = project; }
 
